@@ -104,6 +104,27 @@ def random_distorsion(image, vertical, horizontal) -> Tuple:
                 new_img_arr[i, max_wave + o : row_width + max_wave + o, :] = img_arr[i, :, :]
     return Image.fromarray(np.uint8(new_img_arr_copy if horizontal and vertical else new_img_arr)).convert("RGBA")
 
+def newCoords(list_coords, alpha, l_margin, t_margin):
+    math.cos(math.radians(x+rand_offset))
+    alpha = math.radians(alpha)
+    list_coords2 = []
+    min_x=0
+    min_y=0
+    for coord in list_coords:
+        coord2 = [0]*2
+        coord2[0] = coord[0]*math.cos(alpha)-coord[1]*math.sin(alpha)
+        coord2[1] = coord[0]*math.sin(alpha)+coord[1]*math.cos(alpha)
+        if coord2[0] < min_x:
+            min_x = coord2[0]
+        if coord2[1] < min_y:
+            min_y = coord2[1]
+        list_coords2.append(coord2)
+    list_coords = [[coord[0]+min_x+l_margin, coord[1]+min_y+t_margin] for coord in list_coords2]
+    return list_coords
+
+
+    
+    
 
 def render_data(rand_bg_generator,
     rand_text_generator, rand_font_generator, font_size, word_space_scale, char_space_scale, max_stroke_width,
@@ -125,6 +146,8 @@ def render_data(rand_bg_generator,
     image = _generate_horizontal_text(
         text, font_path, text_color, font_size, 
         word_space_scale, char_space_scale, stroke_width, stroke_fill)
+    w, h = image.size
+    list_coords = [(0,0), (w,0), (0,h), (w,h) ]
 
     # Apply distorsion to image #
     image = random_distorsion(image, vertical=True, horizontal=False)
@@ -151,7 +174,7 @@ def render_data(rand_bg_generator,
         gaussian_filter = ImageFilter.GaussianBlur(rnd.random() * max_blur_radius)
         background_img = background_img.filter(gaussian_filter)
 
-    return background_img, text
+    return background_img, text, newCoords(list_coords, alpha, l_margin, t_margin)
 
 
 
