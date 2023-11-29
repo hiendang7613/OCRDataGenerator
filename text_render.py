@@ -23,6 +23,8 @@ def _generate_horizontal_text(
     char_space_scale: int,
     stroke_width: int = 0,
     stroke_fill: str = "#282828",
+    direction='ltr',
+    
 ) -> Tuple:
     word_split=False
 
@@ -56,6 +58,7 @@ def _generate_horizontal_text(
             font=image_font,
             stroke_width=stroke_width,
             stroke_fill=stroke_fill,
+            direction=direction ,
         )
     return txt_img
 
